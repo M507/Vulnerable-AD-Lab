@@ -1,0 +1,8 @@
+credentials_CAREFUL.json
+credentials_10.json
+credentials_19.json
+credentials_DC.json
+credentials.json
+*.tmp
+packer-builder-vsphere-iso
+tmp.*

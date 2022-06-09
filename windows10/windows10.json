@@ -1,0 +1,58 @@
+{
+  "builders": [
+    {
+      "type": "vsphere-iso",
+
+      "vcenter_server": "{{user `vsphere-server`}}",
+      "username": "{{user `vsphere-user`}}",
+      "password": "{{user `vsphere-password`}}",
+      "insecure_connection": "true",
+
+      "datacenter": "{{user `vsphere-datacenter`}}",
+      "cluster": "{{user `vsphere-cluster`}}",
+      "datastore": "{{user `vsphere-datastore`}}",
+      "folder": "{{user `vsphere-folder`}}",
+
+      "communicator": "winrm",
+      "winrm_username": "{{user `winadmin-username`}}",
+      "winrm_password": "{{user `winadmin-password`}}",
+      "winrm_timeout": "1h30m",
+
+      "convert_to_template": "false",
+
+      "vm_name": "{{user `vm-name`}}",
+      "guest_os_type": "windows9_64Guest",
+
+      "CPUs":             2,
+      "RAM":              4096,
+      "RAM_reserve_all": true,
+      "firmware": "bios",
+
+
+      "disk_controller_type": "lsilogic-sas",
+      "disk_size":  32768,
+      "disk_thin_provisioned": "{{user `disk-thin-provision`}}",
+
+
+      "network":"{{user `vsphere-network`}}",
+
+
+      "iso_paths": [
+        "{{user `os_iso_path`}}",
+        "[] /vmimages/tools-isoimages/windows.iso"
+      ],
+
+      "floppy_files": [
+        "{{template_dir}}/setup/"
+      ]
+
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "windows-shell",
+      "inline": ["ipconfig /all"]
+    }
+  ]
+}

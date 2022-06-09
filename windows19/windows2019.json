@@ -1,0 +1,81 @@
+{
+  "builders": [
+    {
+        "type": "vsphere-iso",
+  
+        "vcenter_server": "{{user `vsphere-server`}}",
+        "username": "{{user `vsphere-user`}}",
+        "password": "{{user `vsphere-password`}}",
+        "insecure_connection": "true",
+  
+        "datacenter": "{{user `vsphere-datacenter`}}",
+        "cluster": "{{user `vsphere-cluster`}}",
+        "datastore": "{{user `vsphere-datastore`}}",
+        "folder": "{{user `vsphere-folder`}}",
+  
+        "communicator": "winrm",
+        "winrm_username": "Administrator",
+        "winrm_password": "{{user `dc-winadmin-password`}}",
+        "winrm_timeout": "1h30m",
+  
+        "convert_to_template": "false",
+
+        "vm_name": "{{user `dc-vm-name`}}",
+        "guest_os_type": "windows9Server64Guest",
+  
+        "CPUs": "4",
+        "RAM": "8192",
+        "RAM_reserve_all": true,
+        "firmware": "bios",
+  
+        
+        "disk_controller_type": "lsilogic-sas",
+        "disk_size":  40960,
+        "disk_thin_provisioned": "{{user `dc-disk-thin-provision`}}",
+        
+        
+          
+
+        "network":"{{user `vsphere-network`}}",
+
+  
+        "iso_paths": [
+          "{{user `dc-os_iso_path`}}",
+          "[] /vmimages/tools-isoimages/windows.iso"
+        ],
+  
+        "floppy_files": [
+          "{{template_dir}}/scripts/"
+        ]
+    }
+  ],
+  
+  "provisioners": [
+    {
+      "type": "windows-shell",
+      "inline": ["ipconfig /all > C:/TEMP/ipconfig.out"]
+    },
+    {
+      "type": "file",
+      "direction": "download",
+      "source": "c:\\TEMP\\ipconfig.out",
+      "destination": "{{template_dir}}/pulled/ipconfig.out"
+    },
+    {
+      "type": "windows-shell",
+      "pause_before": "600s",
+      "inline": ["dir c:\\Temp\\"]
+    },
+    {
+      "type": "windows-restart",
+      "restart_command": "powershell \"& {(Get-WmiObject win32_operatingsystem).LastBootUpTime > C:\\ProgramData\\lastboot.txt; Restart-Computer -force}\"",
+      "restart_check_command": "powershell -command \"& {if ((get-content C:\\ProgramData\\lastboot.txt) -eq (Get-WmiObject win32_operatingsystem).LastBootUpTime) {Write-Output 'Sleeping for 600 seconds to wait for reboot'; start-sleep 600} else {Write-Output 'Reboot complete'}}\""
+    },
+    {
+      "type": "windows-shell",
+      "pause_before": "600s",
+      "inline": ["cmd.exe /c C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -File  c:\\Temp\\vulnad.ps1"]
+    }
+  ]
+   
+}
