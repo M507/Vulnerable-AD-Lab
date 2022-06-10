@@ -6,3 +6,8 @@ credentials.json
 *.tmp
 packer-builder-vsphere-iso
 tmp.*
+*.iso
+output-virtualbox-iso
+packer_cache
+ISOs
+ipconfig.out

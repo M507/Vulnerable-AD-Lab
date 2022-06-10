@@ -1,0 +1,48 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", "2048" ],
+        [ "modifyvm", "{{.Name}}", "--vram", "48" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "2" ],
+        [ "modifyvm", "{{.Name}}", "--nic1", "nat"]
+      ],
+      
+      "vm_name": "{{user `vm-name`}}",
+      "guest_os_type": "windows9_64Guest",
+
+      "communicator": "winrm",
+      "winrm_username": "{{user `winadmin-username`}}",
+      "winrm_password": "{{user `winadmin-password`}}",
+      "winrm_timeout": "1h30m",
+
+
+      "CPUs":  2,
+      "disk_size":  32768,
+    
+
+      "iso_url": "{{ user `os_iso_path` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "md5",
+
+
+      "floppy_files": [
+        "{{template_dir}}/setup/",
+        "{{template_dir}}/autounattends/vbox/",
+        "{{template_dir}}/vbox/"
+      ],
+
+      "output_directory": "{{template_dir}}/vbox-data"
+
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "windows-shell",
+      "inline": ["ipconfig /all"]
+    }
+  ]
+}

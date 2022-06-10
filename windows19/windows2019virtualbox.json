@@ -1,53 +1,42 @@
 {
   "builders": [
     {
-        "type": "vsphere-iso",
-  
-        "vcenter_server": "{{user `vsphere-server`}}",
-        "username": "{{user `vsphere-user`}}",
-        "password": "{{user `vsphere-password`}}",
-        "insecure_connection": "true",
-  
-        "datacenter": "{{user `vsphere-datacenter`}}",
-        "cluster": "{{user `vsphere-cluster`}}",
-        "datastore": "{{user `vsphere-datastore`}}",
-        "folder": "{{user `vsphere-folder`}}",
+        "type": "virtualbox-iso",
+
+        "vboxmanage": [
+          [ "modifyvm", "{{.Name}}", "--memory", "2048" ],
+          [ "modifyvm", "{{.Name}}", "--vram", "48" ],
+          [ "modifyvm", "{{.Name}}", "--cpus", "2" ],
+          [ "modifyvm", "{{.Name}}", "--nic1", "nat"]
+        ],
+        
+        "guest_os_type": "windows9Server64Guest",
   
         "communicator": "winrm",
         "winrm_username": "Administrator",
         "winrm_password": "{{user `dc-winadmin-password`}}",
         "winrm_timeout": "1h30m",
   
-        "convert_to_template": "false",
 
         "vm_name": "{{user `dc-vm-name`}}",
-        "guest_os_type": "windows9Server64Guest",
+        
   
         "CPUs": "4",
-        "RAM": "8192",
-        "RAM_reserve_all": true,
-        "firmware": "bios",
-  
-        
-        "disk_controller_type": "lsilogic-sas",
         "disk_size":  40960,
-        "disk_thin_provisioned": "{{user `dc-disk-thin-provision`}}",
-        
-        
-          
 
-        "network":"{{user `vsphere-network`}}",
 
-  
-        "iso_paths": [
-          "{{user `dc-os_iso_path`}}",
-          "[] /vmimages/tools-isoimages/windows.iso"
-        ],
+        "iso_url": "{{ user `dc-os_iso_path` }}",
+        "iso_checksum": "{{ user `dc-iso_checksum` }}",
+        "iso_checksum_type": "md5",
   
         "floppy_files": [
           "{{template_dir}}/scripts/",
-          "{{template_dir}}/autounattends/vsphere"
-        ]
+          "{{template_dir}}/autounattends/vbox/",
+          "{{template_dir}}/vbox/"
+        ],
+
+        "output_directory": "{{template_dir}}/vbox-data"
+
     }
   ],
   
