@@ -43,7 +43,8 @@
       ],
 
       "floppy_files": [
-        "{{template_dir}}/setup/"
+        "{{template_dir}}/setup/",
+        "{{template_dir}}/autounattends/vsphere/"
       ]
 
     }
