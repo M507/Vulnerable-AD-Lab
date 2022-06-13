@@ -1,6 +1,6 @@
 ## Vulnerable AD Lab
 
-The main goals of this lab are for security professionals to examine their skills and tools, help system administrators better understand the processes of securing AD networks, and help teachers/students to teach/learn Active Directory security in a safe and prepared environment. 
+The main goals of this lab are for security professionals to examine their tools and skills and help system administrators better understand the processes of securing AD networks.
 
 ### Supports:
 - Oracle VM VirtualBox
