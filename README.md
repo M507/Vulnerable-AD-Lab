@@ -16,6 +16,6 @@ Copy `credentials.virtualbox.example.json` and edit the environment variables. T
 Note that `deploy_virtualbox.sh` is for virtualbox and `deploy.sh` is for vSphere.
 
 
-
-Read more about Vulnerable AD Lab: [https://shellcode.blog/Vulnerable-AD-Lab-IaC](https://shellcode.blog/Vulnerable-AD-Lab-IaC).
+Be aware that some credentials are hard coded on different files. I have no documentation for this project, but I have published a short blog post about it:
+- Vulnerable AD Lab: [https://shellcode.blog/Vulnerable-AD-Lab-IaC](https://shellcode.blog/Vulnerable-AD-Lab-IaC).
 
